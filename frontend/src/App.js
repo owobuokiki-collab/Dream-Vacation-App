@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+const API_URL = 'http://127.0.0.1:3001';
 
 function App() {
   const [destinations, setDestinations] = useState([]);
@@ -22,12 +22,18 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log("Submitting country:", country);
+
     try {
-      await axios.post(`${API_URL}/api/destinations`, { country });
+      const res = await axios.post(`${API_URL}/api/destinations`, { country });
+      console.log("Response:", res.data);
+
       setCountry('');
       fetchDestinations();
     } catch (error) {
-      console.error('Error adding destination:', error);
+      console.error('FULL ERROR:', error.response?.data || error.message);
+      alert(error.response?.data?.error || "Failed to add destination");
     }
   };
 
@@ -43,6 +49,7 @@ function App() {
   return (
     <div className="App">
       <h1>Dream Vacation Destinations</h1>
+
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -53,6 +60,7 @@ function App() {
         />
         <button type="submit">Add Destination</button>
       </form>
+
       <ul>
         {destinations.map((dest) => (
           <li key={dest.id}>
