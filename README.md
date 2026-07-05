@@ -42,3 +42,43 @@ This application allows users to create a list of countries they'd like to visit
 - **Environment Management**: Separate configurations for different environments (development, staging, production) using environment variables.
 - **Security**: Sensitive information is managed using environment variables and Kubernetes Secrets.
 - **Documentation**: The project is well-documented to facilitate onboarding and maintenance.
+
+## CI/CD Pipeline
+
+This project uses GitHub Actions to automate the build and deployment process.
+
+### Backend Workflow
+- Triggers on every push and pull request to the `main` and `dev` branches.
+- Builds the backend Docker image.
+- Logs in to Docker Hub using GitHub Secrets.
+- Pushes the Docker image tagged with:
+  - `latest`
+  - Git commit SHA
+
+### Frontend Workflow
+- Triggers on every push and pull request to the `main` and `dev` branches.
+- Builds the frontend Docker image.
+- Logs in to Docker Hub using GitHub Secrets.
+- Pushes the Docker image tagged with:
+  - `latest`
+  - Git commit SHA
+
+### GitHub Secrets
+
+The following repository secrets are required:
+
+- `DOCKER_USERNAME`
+- `DOCKER_TOKEN`
+
+### Docker Compose
+
+The application can be started locally with:
+
+```bash
+docker compose up --build
+```
+
+This starts:
+- Frontend
+- Backend
+- PostgreSQL
