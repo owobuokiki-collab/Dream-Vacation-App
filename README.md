@@ -1,6 +1,33 @@
 # Dream Vacation Destinations
 
 This application allows users to create a list of countries they'd like to visit, providing basic information about each country. The project is structured to mimic a real-life production environment, employing best practices in software development, deployment, and continuous integration/continuous delivery (CI/CD).
+![GitHub](https://img.shields.io/badge/GitHub-Actions-blue?logo=githubactions)
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker)
+![React](https://img.shields.io/badge/React-Frontend-61DAFB?logo=react)
+![Node.js](https://img.shields.io/badge/Node.js-Backend-339933?logo=node.js)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?logo=postgresql)
+
+## Overview
+
+## 🏗️ Architecture
+
+```text
+                User
+                  │
+                  ▼
+        React Frontend (Nginx)
+                  │
+                  ▼
+         Node.js Express API
+                  │
+                  ▼
+          PostgreSQL Database
+
+      GitHub Actions CI/CD
+                  │
+                  ▼
+             Docker Hub
+```
 
 ## Setup
 
@@ -34,8 +61,8 @@ This application allows users to create a list of countries they'd like to visit
 - **Backend**: Node.js with Express
 - **Database**: PostgreSQL
 - **External API**: REST Countries API
-- **CI/CD**: To be implemented with [CI/CD tools, e.g., GitHub Actions, Jenkins, or Azure DevOps]
-- **Infrastructure as Code**: To be implemented with tools like Terraform or Helm
+- **CI/CD**: GitHub Actions
+- **Infrastructure as Code**: Planned for future implementation using Terraform.
 
 ## Best Practices
 - **Version Control**: All changes are tracked in Git for collaboration and history management.
