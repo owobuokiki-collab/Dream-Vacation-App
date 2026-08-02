@@ -27,4 +27,4 @@ jobs:
         run: docker build -t $DOCKER_USERNAME/dream-vacation-frontend:latest .
 
       - name: Push frontend image
-        run: docker push $DOCKER_USERNAME/dream-vacation-frontend:latest .
+        run: docker push $DOCKER_USERNAME/dream-vacation-frontend:latest
