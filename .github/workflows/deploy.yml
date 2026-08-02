@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Infrastructure and Deploy
 
 on:
   workflow_run:
@@ -9,9 +9,44 @@ on:
       - main
 
 jobs:
-  deploy:
+  terraform:
+    name: Provision Infrastructure
     runs-on: ubuntu-latest
+
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+  deploy:
+    name: Deploy Application
+    needs: terraform
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,16 +60,18 @@ jobs:
           source: "docker-compose.prod.yml,backend/.env,db/init.sql"
           target: "/home/ubuntu/dream-vacation-app"
 
-      - name: SSH and deploy with Docker Compose
+      - name: Deploy Application
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           envs: DOCKER_USERNAME
           script: |
+            mkdir -p /home/ubuntu/dream-vacation-app
             cd /home/ubuntu/dream-vacation-app
+
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
