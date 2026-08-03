@@ -1,3 +1,4 @@
+vagrant@ubuntu-focal:~/Dream-Vacation-App$ cat .github/workflows/deploy.yml
 name: Infrastructure and Deploy
 
 on:
