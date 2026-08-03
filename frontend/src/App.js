@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_URL = 'http://100.55.171.79:3001';
+const API_URL = process.env.REACT_APP_API_URL || 'http://98.84.48.228:3001';
 
 function App() {
   const [destinations, setDestinations] = useState([]);
